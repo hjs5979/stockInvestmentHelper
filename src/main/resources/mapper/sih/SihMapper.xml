@@ -1,0 +1,98 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sih.dao.SihDao">
+    <!-- 여기에 SQL 쿼리들을 작성합니다. -->
+    <select id="selectStockList" resultType="com.sih.dao.dto.StockDto">
+    	SELECT S.STOCK_ID AS stockId
+    	     , S.STOCK_THEMA AS stockThema
+    	     , S.STOCK_VALUE AS stockValue 
+    	FROM STOCK S
+    	
+    </select>
+    
+    <select id="selectNewsList" parameterType = "com.sih.dao.dto.NewsDto" resultType="com.sih.dao.dto.NewsDto">
+    	SELECT N.id
+    	     , N.category
+    	     , N.title
+    	     , N.url
+    	FROM news N
+    	
+    	WHERE 
+    	1=1
+    	<if test='id != null'>
+			AND N.id = #{id}
+ 		</if>
+    </select>
+    
+    <select id="selectWordList" resultType="com.sih.dao.dto.WordDto">
+    	SELECT W.WORD_ID as wordId
+    	     , W.WORD_CONTENT as wordContent
+    	     , W.WORD_COUNT as wordCount
+    	FROM WORD W
+    </select>
+    
+    <select id="selectNewsWordList" parameterType = "com.sih.dao.dto.NewsWordDto" resultType="com.sih.dao.dto.NewsWordDto">
+    	SELECT NW.id
+    	     , NW.news_id
+    	     , NW.words_id
+    	FROM news_words NW
+    	
+    	WHERE 
+    	1=1
+    	<if test='id != null'>
+			AND NW.id = #{id}
+ 		</if>
+ 		
+    </select>
+    
+    <select id="selectDetailList" parameterType = "com.sih.dao.dto.WordDto" resultType="com.sih.dao.dto.DetailDto">
+    	SELECT N.NEWS_TITLE as newsTitle
+    		 , N.NEWS_ID as newsId
+    	     , N.NEWS_URL as newsUrl
+    	     , W.WORD_CONTENT as wordContent
+    	     , W.WORD_ID as wordId
+    	     , W.WORD_COUNT as wordCount
+    	FROM WORD W
+    	LEFT JOIN NEWS_WORD NW 
+    	       ON W.WORD_CONTENT = NW.WORD_CONTENT
+    	LEFT JOIN NEWS N
+    	       ON N.NEWS_Id = NW.NEWS_ID
+    	WHERE W.WORD_ID = #{wordId}
+    </select>
+    
+    <select id="countBoardList" parameterType = "com.sih.dao.dto.BoardInqDto" resultType="Integer">
+    	SELECT COUNT(*) AS countBoard
+    	FROM BOARD B
+    	WHERE CONCAT(B.BOARD_TITLE, B.BOARD_WRT_ID, B.BOARD_CONTENT) LIKE CONCAT('%', #{inqCndtCon}, '%')
+    	<if test="'20'.equals(#{inqCndtDcd})">
+    	AND B.BOARD_TITLE LIKE #{inqCndtCon}
+    	</if>
+    	<if test="'30'.equals(#{inqCndtDcd})">
+    	AND U.USER_ID LIKE #{inqCndtCon}
+    	</if>
+    	<if test="'40'.equals(#{inqCndtDcd})">
+    	AND B.BOARD_CONTENT LIKE #{inqCndtCon}
+    	</if>
+    </select>
+    
+    <select id="selectBoardList" parameterType = "com.sih.dao.dto.BoardInqDto" resultType="com.sih.dao.dto.BoardDto">
+    	SELECT B.BOARD_ID AS boardId
+    	     , B.BOARD_TITLE AS boardTitle
+    	     , B.BOARD_YMD AS boardYmd
+    	     , B.BOARD_WRT_ID AS boardWrtId
+    	     , B.BOARD_CONTENT AS boardContent
+    	FROM BOARD B
+    	WHERE CONCAT(B.BOARD_TITLE, B.BOARD_WRT_ID, B.BOARD_CONTENT) LIKE CONCAT('%', #{inqCndtCon}, '%')
+    	<if test="'20'.equals(#{inqCndtDcd})">
+    	AND B.BOARD_TITLE LIKE #{inqCndtCon}
+    	</if>
+    	<if test="'30'.equals(#{inqCndtDcd})">
+    	AND U.USER_ID LIKE #{inqCndtCon}
+    	</if>
+    	<if test="'40'.equals(#{inqCndtDcd})">
+    	AND B.BOARD_CONTENT LIKE #{inqCndtCon}
+    	</if>
+    </select>
+    
+
+    
+</mapper>
