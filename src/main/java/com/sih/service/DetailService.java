@@ -25,6 +25,9 @@ public class DetailService {
 	
 	private final SihDao sihDao;
 	
+	/*
+	 * 설명 : 단어 클릭 시 상세 조회 서비스
+	 */
 	public List<DetailOutVo> selectDetailList(WordInVo wordInVo){
 		
 		WordDto wordsInDto = new WordDto();

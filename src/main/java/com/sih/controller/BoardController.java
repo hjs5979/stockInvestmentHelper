@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sih.controller.vo.BoardInVo;
+import com.sih.controller.vo.BoardInqInVo;
 import com.sih.controller.vo.BoardOutVo;
 import com.sih.controller.vo.DetailOutVo;
 import com.sih.controller.vo.PageOutVo;
@@ -31,28 +32,38 @@ public class BoardController {
 	
 	private final BoardService boardService;
 	
+	/*
+	 * 설명 : 게시판 리스트 조회 컨트롤러
+	 */
 	@PostMapping("/list")
-	public PageOutVo selectWordList(@RequestBody BoardInVo boardInVo) {
+	public PageOutVo selectWordList(@RequestBody BoardInqInVo boardInqInVo) {
+		logger.info("===========================================================");
+		logger.info("============ selectBoardList controller start =============");
 		
-		logger.info("selectBoardList controller start");
+		if (boardInqInVo == null) {
+			throw new RuntimeException("selectBoarddList Controller 입력조건");
+		}
 		
-		PageOutVo pageOutVo = boardService.selectBoardList(boardInVo);
+		PageOutVo pageOutVo = boardService.selectBoardList(boardInqInVo);
 			
-		logger.info("selectBoardList controller end");
-		
+		logger.info("============ selectBoardList controller end ============");
+		logger.info("========================================================");
 		return pageOutVo;
 	}
 	
-//	@PostMapping("/detail")
-//	public List<DetailOutVo> selectDetailList(@RequestBody WordInVo wordInVo) {
-//		
-//		logger.info("selectDetailList controller start");
-//			
-//		List<DetailOutVo> detailOutVo = detailService.selectDetailList(wordInVo);
-//			
-//		logger.info("selectDetailList controller end");
-//		
-//		return detailOutVo;
-//	}
+	/*
+	 * 설명 : 게시판 상세 조회 컨트롤러
+	 */
+	@PostMapping("/detail")
+	public BoardOutVo selectBoardDetail(@RequestBody BoardInVo boardInVo) {
+		logger.info("===========================================================");
+		logger.info("======== selectDetailList controller start ================");
+			
+		BoardOutVo boardDetailOutVo = boardService.selectBoardDetail(boardInVo);
+			
+		logger.info("========== selectDetailList controller end ================");
+		logger.info("===========================================================");
+		return boardDetailOutVo;
+	}
 	
 }

@@ -29,39 +29,52 @@ public class MainController {
 	
 	private final DetailService detailService;
 	
+	/*
+	 * 설명 : 메인 - 단어 조회 컨트롤러(워드클라우드용)
+	 */
 	@GetMapping("/word")
 	public List<WordOutVo> selectWordList() {
 		
-		logger.info("selectWordList controller start");
+		logger.info("============ selectWordList controller start ============");
 		
 		List<WordOutVo> wordOutVo = mainService.selectWordList();
 			
-		logger.info("selectWordList controller end");
+		logger.info("============ selectWordList controller end ============");
 		
 		return wordOutVo;
 	}
 	
+	/*
+	 * 설명 : 메인 - 주식 리스트 조회 컨트롤러(메뉴용)
+	 */
 	@GetMapping("/stock")
 	public List<StockOutVo> selectStockList() {
-		
-		logger.info("selectStockList controller start");
+		logger.info("=========================================================");
+		logger.info("============ electStockList controller start ============");
 		
 		List<StockOutVo> stockOutVo = mainService.selectStockList();
 			
-		logger.info("selectStockList controller end");
-		
+		logger.info("============ selectStockList controller end ============");
+		logger.info("========================================================");
 		return stockOutVo;
 	}
 	
+	/*
+	 * 설명 : 메인 - 단어선택 시 상세조회 컨트롤러
+	 */
 	@PostMapping("/detail")
 	public List<DetailOutVo> selectDetailList(@RequestBody WordInVo wordInVo) {
+		logger.info("==========================================================");
+		logger.info("============ selectDetailList controller start ============");
 		
-		logger.info("selectDetailList controller start");
-			
+		if (wordInVo == null) {
+			throw new RuntimeException("selectDetailList Controller 입력조건");
+		}
+		
 		List<DetailOutVo> detailOutVo = detailService.selectDetailList(wordInVo);
 			
-		logger.info("selectDetailList controller end");
-		
+		logger.info("============ selectDetailList controller end ============");
+		logger.info("=========================================================");
 		return detailOutVo;
 	}
 	

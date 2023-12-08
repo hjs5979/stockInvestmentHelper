@@ -25,6 +25,9 @@ public class MainService {
 	
 	private final SihDao sihDao;
 	
+	/*
+	 * 설명 : 단어 리스트 조회 서비스(워드클라우드용)
+	 */
 	public List<WordOutVo> selectWordList(){
 		
 		logger.info("selectWordList service start");
@@ -50,6 +53,9 @@ public class MainService {
 		return wordOutVoList;
 	}
 	
+	/*
+	 * 설명 : 주식 리스트 조회 서비스(메뉴용)
+	 */
 	public List<StockOutVo> selectStockList(){
 		
 		logger.info("selectStockList service start");

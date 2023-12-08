@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import com.sih.controller.vo.UserInVo;
 import com.sih.controller.vo.UserOutVo;
@@ -38,9 +40,20 @@ public class UserService {
 	private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+	/*
+	 * 설명 : 로그인 서비스
+	 */
 	public ResponseEntity<?> login(UserInVo userInVo, HttpServletResponse httpResponse){
 		
-		logger.info("selectWordList service start");
+		logger.info("=========================================================");
+		logger.info("================== login service start ==================");
+		
+		if(ObjectUtils.isEmpty(userInVo.getUserId())) {
+			throw new RuntimeException("login service 입력조건 [ userId ]");
+		}
+		if(ObjectUtils.isEmpty(userInVo.getUserPassword())) {
+			throw new RuntimeException("login service 입력조건 [ userPassword ]");
+		}
 		
 		UserDto userInDto = new UserDto();
 		
@@ -75,6 +88,9 @@ public class UserService {
 		return new ResponseEntity<>(userOutVo, HttpStatus.OK);
 	}
 	
+	/*
+	 * 설명 : 토큰 생성 (미완)
+	 */
 	public String generateToken(String userId) {
 		Date now = new Date();
 		
@@ -88,38 +104,78 @@ public class UserService {
 				.compact();
 	}
 	
-public Integer idcheck(UserInVo userInVo){
+	/*
+	 * 설명 : 아이디 중복 체크 서비스
+	 */
+	public Integer idcheck(UserInVo userInVo){
+			
+		    logger.info("============================================================");
+			logger.info("================== idcheck service start ===================");
+			
+			if(ObjectUtils.isEmpty(userInVo.getUserId())) {
+				throw new RuntimeException("idcheck service 입력조건 [ userId ]");
+			}
+			
+			UserDto userInDto = new UserDto();
+			
+			userInDto.setUserId(userInVo.getUserId());
+			
+			Integer checkYn = userDao.idcheck(userInDto);
+			
+			logger.info("============== selectWordList service end =================");
+			logger.info("===========================================================");
+			return checkYn;
+		}
+	
+	/*
+	 * 설명 : 회원가입 서비스
+	 */
+	public void signin(UserInVo userInVo){
 		
-		logger.info("selectWordList service start");
+		logger.info("============================================================");
+		logger.info("================= signin service start =====================");
+		
+		this.vrfcSigninInputValue(userInVo);
 		
 		UserDto userInDto = new UserDto();
 		
 		userInDto.setUserId(userInVo.getUserId());
+		userInDto.setUserPassword(userInVo.getUserPassword());
+		userInDto.setUserName(userInVo.getUserName());
+		userInDto.setUserEmail(userInVo.getUserEmail());
 		
 		Integer checkYn = userDao.idcheck(userInDto);
 		
-		logger.info("selectWordList service end");
+		if(checkYn > 0) {
+			throw new RuntimeException("signin : 아이디 중복");
+		}
 		
-		return checkYn;
+		userDao.signin(userInDto);
+		
+		logger.info("============= selectWordList service end ===================");
+		logger.info("============================================================");
+		
 	}
-
-public void signin(UserInVo userInVo){
 	
-	logger.info("selectWordList service start");
-	
-	UserDto userInDto = new UserDto();
-	
-	userInDto.setUserId(userInVo.getUserId());
-	userInDto.setUserPassword(userInVo.getUserPassword());
-	userInDto.setUserName(userInVo.getUserName());
-	userInDto.setUserEmail(userInVo.getUserEmail());
-	
-	userDao.signin(userInDto);
-	
-	logger.info("selectWordList service end");
-	
-}
-
+	/*
+	 * 설명 : 회원가입 입력값 체크 메서드
+	 */
+	private void vrfcSigninInputValue(UserInVo userInVo) {
+		
+		if(ObjectUtils.isEmpty(userInVo.getUserId())) {
+			throw new RuntimeException("signin service 입력조건 [ userId ]");
+		}
+		if(ObjectUtils.isEmpty(userInVo.getUserPassword())) {
+			throw new RuntimeException("signin service 입력조건 [ userPassword ]");
+		}
+		if(ObjectUtils.isEmpty(userInVo.getUserName())) {
+			throw new RuntimeException("signin service 입력조건 [ userName ]");
+		}
+		if(ObjectUtils.isEmpty(userInVo.getUserEmail())) {
+			throw new RuntimeException("signin service 입력조건 [ userEmail ]");
+		}
+		
+	}
 //	public boolean validateToken(String token) {
 //        try {
 //            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);

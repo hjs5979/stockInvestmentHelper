@@ -35,39 +35,63 @@ public class UserController {
 	
 	private final UserService userService;
 	
+	/*
+	 * 설명 : 로그인 컨트롤러
+	 */
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody UserInVo userInVo, HttpServletResponse httpResponse){
+
+		logger.info("================================================");
+		logger.info("============ login Controller start ============");
 		
-		logger.info("login service start");
-			
+		if (userInVo == null) {
+			throw new RuntimeException("selectDetailList Controller 입력조건 [ userInVo ] ");
+		}
+		
 		ResponseEntity<?> responseEntity = userService.login(userInVo, httpResponse);
 		
-		logger.info("login service end");
+		logger.info("============ login Controller end ============");
+		logger.info("==============================================");
 		
 		return responseEntity;
 	}
 	
+	/*
+	 * 설명 : 아이디중복체크 컨트롤러
+	 */
 	@PostMapping("/idcheck")
 	public Integer idcheck(@RequestBody UserInVo userInVo){
 		
-		logger.info("login service start");
-			
+		logger.info("==================================================");
+		logger.info("============ idcheck Controller start ============");
+		
+		if (userInVo == null) {
+			throw new RuntimeException("selectDetailList Controller 입력조건");
+		}
+		
 		Integer checkYn = userService.idcheck(userInVo);
 		
-		logger.info("login service end");
-		
+		logger.info("============ idcheck Controller end ============");
+		logger.info("================================================");
 		return checkYn;
 	}
 	
+	/*
+	 * 설명 : 회원가입 컨트롤러
+	 */
 	@PostMapping("/signin")
 	public Integer signin(@RequestBody UserInVo userInVo){
+		logger.info("=================================================");
+		logger.info("============ signin Controller start ============");
 		
-		logger.info("login service start");
-			
+		if (userInVo == null) {
+			throw new RuntimeException("selectDetailList Controller 입력조건");
+		}
+		
 		userService.signin(userInVo);
 		
-		logger.info("login service end");
-		
+		logger.info("============ signin Controller end ============");
+		logger.info("===============================================");
 		return 1;
 	}
 	

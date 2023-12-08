@@ -30,4 +30,6 @@ public interface SihDao {
 	
 	public Integer countBoardList(BoardInqDto boardInqDto);
 	
+	public BoardDto selectBoardDetail(BoardDto boardDto);
+	
 }

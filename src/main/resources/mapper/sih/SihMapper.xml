@@ -93,6 +93,16 @@
     	</if>
     </select>
     
+    <select id="selectBoardDetail" parameterType = "com.sih.dao.dto.BoardDto" resultType="com.sih.dao.dto.BoardDto">
+    	SELECT B.BOARD_ID AS boardId
+    	     , B.BOARD_TITLE AS boardTitle
+    	     , B.BOARD_YMD AS boardYmd
+    	     , B.BOARD_WRT_ID AS boardWrtId
+    	     , B.BOARD_CONTENT AS boardContent
+    	FROM BOARD B
+    	WHERE B.BOARD_ID = #{boardId}
+    </select>
+    
 
     
 </mapper>

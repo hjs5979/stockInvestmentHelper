@@ -9,14 +9,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BoardInVo {
-	private Integer boardId;
+public class BoardInqInVo {
+	private String inqCndtDcd;
 	
-	private String boardTitle;
+	private String inqCndtCon;
 	
-	private LocalDate boardYmd;
-	
-	private String boardWrtId;
-	
-	private String boardContent;
 }
