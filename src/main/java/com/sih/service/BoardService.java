@@ -45,7 +45,7 @@ public class BoardService {
 			throw new RuntimeException("selectBoardList service 입력조건 [ inqCndtCon ]");
 		}
 		if(boardInqInVo.getInqCndtDcd() == null) {
-			throw new RuntimeException("selectBoardList service 입력조건 [ inqCndtDcdn ]");
+			throw new RuntimeException("selectBoardList service 입력조건 [ inqCndtDcd ]");
 		}
 		
 		BoardInqDto boardInqDto = new BoardInqDto();
