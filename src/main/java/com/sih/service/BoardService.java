@@ -107,7 +107,7 @@ public class BoardService {
 		boardOutVo.setBoardWrtId(boardOutDto.getBoardWrtId());
 		boardOutVo.setBoardYmd(boardOutDto.getBoardYmd());
 		
-		logger.info("============ selectBoardDetail service end =============");
+		logger.info("============ selectBoardDetail service end =============+");
 		logger.info("=========================================================");
 		return boardOutVo;
 	}
