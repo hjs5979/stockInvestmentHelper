@@ -26,8 +26,8 @@ public class WebSecurityConfig {
            @Override
            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                CorsConfiguration config = new CorsConfiguration();
-               config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-               config.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000/**"));
+               config.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://ca.thxx.xyz:433"));
+               config.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000/**", "https://ca.thxx.xyz:433/**"));
                config.setAllowedMethods(Arrays.asList("GET","POST"));
                config.setAllowCredentials(true);
                config.setAllowedHeaders(Collections.singletonList("*"));
