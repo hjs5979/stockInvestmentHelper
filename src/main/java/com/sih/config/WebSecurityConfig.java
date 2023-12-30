@@ -4,15 +4,16 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 @Configuration
@@ -38,20 +39,37 @@ public class WebSecurityConfig {
 //               source.registerCorsConfiguration("/**", config);
                return config;
            }
-           }))
-	       .csrf((csrfConfig) -> 
+           }));
+	   http.csrf((csrfConfig) -> 
 	   				csrfConfig.disable()
-	   			)
-	   			.headers((headerConfig) -> 
-	   						headerConfig.frameOptions(frameOptionsConfig ->
-	   														frameOptionsConfig.disable()
-	   													)
-	   					).authorizeHttpRequests((authorizeRequests) -> 
+	   			);
+	   
+	   http.headers((headerConfig) -> 
+	   				headerConfig.frameOptions(frameOptionsConfig ->
+	   				frameOptionsConfig.disable()
+	   													));
+	   http.authorizeHttpRequests((authorizeRequests) -> 
 	   						authorizeRequests
+	   						    // 로그인, 회원가입 화면은 인증없이 입장가능 
 	   							.antMatchers("/**").permitAll()
+	   							// 나머지는 인증필요
 	   							.anyRequest().authenticated()
 	   							);
+//	   http.formLogin(form -> form
+//               .loginPage("http://localhost:3000/login")
+//               .defaultSuccessUrl("/", true)
+//               .permitAll()
+//       );
+//       http.logout(logout -> logout
+//               .permitAll());
+	   
 	   return http.build();
    }
+   
+   @Bean
+   public BCryptPasswordEncoder passwordEncoder() {
+       return new BCryptPasswordEncoder();
+   }
+
 
 }

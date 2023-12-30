@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sih.controller.vo.DetailOutVo;
 import com.sih.controller.vo.NewsOutVo;
@@ -28,6 +29,7 @@ public class DetailService {
 	/*
 	 * 설명 : 단어 클릭 시 상세 조회 서비스
 	 */
+	@Transactional
 	public List<DetailOutVo> selectDetailList(WordInVo wordInVo){
 		
 		WordDto wordsInDto = new WordDto();

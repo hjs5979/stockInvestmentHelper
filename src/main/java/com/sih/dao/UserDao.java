@@ -6,9 +6,11 @@ import com.sih.dao.dto.UserDto;
 
 @Mapper
 public interface UserDao {
-	public UserDto login(UserDto inDto);
+	public UserDto selectUser(UserDto inDto);
 	
 	public Integer idcheck(UserDto inDto);
 	
 	public void signin(UserDto inDto);
+	
+	public void mdfcUserInfo(UserDto inDto);
 }

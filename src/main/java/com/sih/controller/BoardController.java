@@ -66,4 +66,19 @@ public class BoardController {
 		return boardDetailOutVo;
 	}
 	
+	/*
+	 * 설명 : 게시판 등록 컨트롤러
+	 */
+	@PostMapping("/reg")
+	public BoardOutVo regBoard(@RequestBody BoardInVo boardInVo) {
+		logger.info("===========================================================");
+		logger.info("======== selectDetailList controller start ================");
+			
+		BoardOutVo boardOutVo = boardService.regBoard(boardInVo);
+			
+		logger.info("========== selectDetailList controller end ================");
+		logger.info("===========================================================");
+		return boardOutVo;
+	}
+	
 }

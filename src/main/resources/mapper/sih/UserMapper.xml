@@ -1,14 +1,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sih.dao.UserDao">
     <!-- 여기에 SQL 쿼리들을 작성합니다. -->
-    <select id="login" parameterType="com.sih.dao.dto.UserDto" resultType="com.sih.dao.dto.UserDto">
+    <select id="selectUser" parameterType="com.sih.dao.dto.UserDto" resultType="com.sih.dao.dto.UserDto">
     	SELECT U.USER_ID AS userId
     	     , U.USER_PASSWORD AS userPassword
     	     , U.USER_NAME AS userName
     	     , U.USER_EMAIL AS userEmail
+    	     , U.USER_ROLE AS userRole
     	FROM USER U
-    	WHERE U.USER_ID = #{userId} 
-    	  AND U.USER_PASSWORD = #{userPassword}
+    	WHERE U.USER_ID = #{userId}
     	
     </select>
     
@@ -22,13 +22,26 @@
 		(USER_ID,
 		 USER_PASSWORD,
 		 USER_EMAIL,
-		 USER_NAME)
+		 USER_NAME,
+		 USER_ROLE)
 		 VALUES
 		(#{userId},
 		 #{userPassword},
 		 #{userEmail},
-		 #{userName});
+		 #{userName},
+		 #{userRole});
     	
     </insert>
+
+	<update id="mdfcUserInfo" parameterType="com.sih.dao.dto.UserDto">
+		UPDATE USER
+        SET
+        USER_PASSWORD = #{userPassword},
+        USER_EMAIL = #{userEmail},
+        USER_NAME = #{userName},
+        USER_ROLE = #{userRole}
+        WHERE USER_ID = #{userId};
+		
+	</update>
     
 </mapper>

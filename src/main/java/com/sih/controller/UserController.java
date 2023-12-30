@@ -16,10 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sih.controller.vo.DetailOutVo;
 import com.sih.controller.vo.StockOutVo;
+import com.sih.controller.vo.TokenInVo;
+import com.sih.controller.vo.TokenOutVo;
 import com.sih.controller.vo.UserInVo;
 import com.sih.controller.vo.UserOutVo;
 import com.sih.controller.vo.WordInVo;
 import com.sih.controller.vo.WordOutVo;
+import com.sih.dao.dto.UserDto;
 import com.sih.service.DetailService;
 import com.sih.service.MainService;
 import com.sih.service.UserService;
@@ -79,8 +82,8 @@ public class UserController {
 	/*
 	 * 설명 : 회원가입 컨트롤러
 	 */
-	@PostMapping("/signin")
-	public Integer signin(@RequestBody UserInVo userInVo){
+	@PostMapping("/signup")
+	public UserDto signin(@RequestBody UserInVo userInVo){
 		logger.info("=================================================");
 		logger.info("============ signin Controller start ============");
 		
@@ -88,11 +91,70 @@ public class UserController {
 			throw new RuntimeException("selectDetailList Controller 입력조건");
 		}
 		
-		userService.signin(userInVo);
+		UserDto result = userService.signup(userInVo);
 		
 		logger.info("============ signin Controller end ============");
 		logger.info("===============================================");
-		return 1;
+		return result;
+	}
+	
+	/*
+	 * 설명 : 회원정보 수정 컨트롤러
+	 */
+	@PostMapping("/mdfc")
+	public UserDto mdfcUserInfo(@RequestBody UserInVo userInVo){
+		logger.info("=================================================");
+		logger.info("============ mdfcUserInfo Controller start ============");
+		
+		if (userInVo == null) {
+			throw new RuntimeException("selectDetailList Controller 입력조건");
+		}
+		
+		UserDto result = userService.mdfcUserInfo(userInVo);
+		
+		logger.info("============ mdfcUserInfo Controller end ============");
+		logger.info("===============================================");
+		return result;
+	}
+	
+	/*
+	 * 설명 : 유저정보 조회 컨트롤러
+	 */
+	@PostMapping("/selectUser")
+	public UserOutVo selectUser(@RequestBody UserInVo userInVo){
+		logger.info("======================================================");
+		logger.info("============ selectUser Controller start ============");
+		
+		if (userInVo == null) {
+			throw new RuntimeException("selectUser Controller 입력조건");
+		}
+		
+		UserOutVo result = userService.selectUser(userInVo);
+		
+		logger.info("============ selectUser Controller end ============");
+		logger.info("=====================================================");
+		return result;
+	}
+	
+	/*
+	 * 설명 : 유저정보 조회 컨트롤러
+	 */
+	@PostMapping("/checkUser")
+	public TokenOutVo checkUser(@RequestBody TokenInVo tokenInVo){
+		logger.info("======================================================");
+		logger.info("============ checkUser Controller start ============");
+		
+		if (tokenInVo == null) {
+			throw new RuntimeException("checkUser Controller 입력조건");
+		}
+		
+		TokenOutVo result = userService.checkUser(tokenInVo);
+		
+		
+		
+		logger.info("============ checkUser Controller end ============");
+		logger.info("=====================================================");
+		return result;
 	}
 	
 }

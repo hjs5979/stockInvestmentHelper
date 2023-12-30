@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import com.sih.controller.vo.BoardInVo;
@@ -36,6 +37,7 @@ public class BoardService {
 	/*
 	 * 설명 : 게시판 리스트 조회 서비스
 	 */
+	@Transactional
 	public PageOutVo selectBoardList(BoardInqInVo boardInqInVo){
 		
 		logger.info("===================================================================");
@@ -85,6 +87,7 @@ public class BoardService {
 	/*
 	 * 설명 : 게시판 상세 조회 서비스
 	 */
+	@Transactional
 	public BoardOutVo selectBoardDetail(BoardInVo boardInVo){
 		
 		logger.info("===================================================================");
@@ -110,6 +113,52 @@ public class BoardService {
 		logger.info("============ selectBoardDetail service end =============+");
 		logger.info("=========================================================");
 		return boardOutVo;
+	}
+	
+	/*
+	 * 설명 : 게시판 등록 서비스
+	 */
+	@Transactional
+	public BoardOutVo regBoard(BoardInVo boardInVo){
+		
+		logger.info("===================================================================");
+		logger.info("================== regBoard service start ==================");
+		
+		this.vrfcRegBoardInputValue(boardInVo);
+		
+		BoardDto boardInDto = new BoardDto();
+		boardInDto.setBoardId(boardInVo.getBoardId());
+		
+		BoardDto boardOutDto = sihDao.selectBoardDetail(boardInDto);
+		
+		BoardOutVo boardOutVo = new BoardOutVo();
+		
+		boardOutVo.setBoardId(boardOutDto.getBoardId());
+		boardOutVo.setBoardTitle(boardOutDto.getBoardTitle());
+		boardOutVo.setBoardContent(boardOutDto.getBoardContent());
+		boardOutVo.setBoardWrtId(boardOutDto.getBoardWrtId());
+		boardOutVo.setBoardYmd(boardOutDto.getBoardYmd());
+		
+		logger.info("============ regBoard service end =============+");
+		logger.info("=========================================================");
+		return boardOutVo;
+	}
+	
+	/*
+	 * 설명 : 회원가입 입력값 체크 메서드
+	 */
+	private void vrfcRegBoardInputValue(BoardInVo boardInVo) {
+		
+		if(ObjectUtils.isEmpty(boardInVo.getBoardId())) {
+			throw new RuntimeException("regBoard service 입력조건 [ boardId ]");
+		}
+		if(ObjectUtils.isEmpty(boardInVo.getBoardTitle())) {
+			throw new RuntimeException("regBoard service 입력조건 [ boardTitle ]");
+		}
+		if(ObjectUtils.isEmpty(boardInVo.getBoardContent())) {
+			throw new RuntimeException("regBoard service 입력조건 [ boardContent ]");
+		}
+		
 	}
 
 

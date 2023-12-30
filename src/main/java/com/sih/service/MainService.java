@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sih.controller.vo.StockInVo;
 import com.sih.controller.vo.StockOutVo;
@@ -28,6 +29,7 @@ public class MainService {
 	/*
 	 * 설명 : 단어 리스트 조회 서비스(워드클라우드용)
 	 */
+	@Transactional
 	public List<WordOutVo> selectWordList(){
 		
 		logger.info("selectWordList service start");
@@ -56,6 +58,7 @@ public class MainService {
 	/*
 	 * 설명 : 주식 리스트 조회 서비스(메뉴용)
 	 */
+	@Transactional
 	public List<StockOutVo> selectStockList(){
 		
 		logger.info("selectStockList service start");

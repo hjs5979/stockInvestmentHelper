@@ -15,4 +15,6 @@ public class UserInVo {
 	private String userName;
 	
 	private String userEmail;
+	
+	private String newPassword;
 }
