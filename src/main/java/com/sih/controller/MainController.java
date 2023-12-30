@@ -39,7 +39,7 @@ public class MainController {
 		
 		List<WordOutVo> wordOutVo = mainService.selectWordList();
 			
-		logger.info("============ selectWordList controller end ============");
+		logger.info("============ selectWordList controller end ============++");
 		
 		return wordOutVo;
 	}
