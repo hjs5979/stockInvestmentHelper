@@ -71,15 +71,17 @@
     	</if>
     	<if test="'40'.equals(#{inqCndtDcd})">
     	AND B.BOARD_CONTENT LIKE #{inqCndtCon}
-    	</if>
+    	</if> 
     </select>
     
     <select id="selectBoardList" parameterType = "com.sih.dao.dto.BoardInqDto" resultType="com.sih.dao.dto.BoardDto">
     	SELECT B.BOARD_ID AS boardId
     	     , B.BOARD_TITLE AS boardTitle
-    	     , B.BOARD_YMD AS boardYmd
+    	     , B.BOARD_CRET_TS AS boardCretTs
     	     , B.BOARD_WRT_ID AS boardWrtId
     	     , B.BOARD_CONTENT AS boardContent
+    	     , B.ATCH_NO AS atchNo
+    	     , EXISTS(SELECT 1 FROM ATCH_DTL AD WHERE AD.ATCH_NO = B.ATCH_NO) AS atchYn
     	FROM BOARD B
     	WHERE CONCAT(B.BOARD_TITLE, B.BOARD_WRT_ID, B.BOARD_CONTENT) LIKE CONCAT('%', #{inqCndtCon}, '%')
     	<if test="'20'.equals(#{inqCndtDcd})">
@@ -91,18 +93,156 @@
     	<if test="'40'.equals(#{inqCndtDcd})">
     	AND B.BOARD_CONTENT LIKE #{inqCndtCon}
     	</if>
+    	
+    	ORDER BY B.BOARD_CRET_TS DESC
     </select>
     
     <select id="selectBoardDetail" parameterType = "com.sih.dao.dto.BoardDto" resultType="com.sih.dao.dto.BoardDto">
     	SELECT B.BOARD_ID AS boardId
     	     , B.BOARD_TITLE AS boardTitle
-    	     , B.BOARD_YMD AS boardYmd
+    	     , B.BOARD_CRET_TS AS boardCretTs
     	     , B.BOARD_WRT_ID AS boardWrtId
     	     , B.BOARD_CONTENT AS boardContent
+    	     , B.ATCH_NO AS atchNo
     	FROM BOARD B
     	WHERE B.BOARD_ID = #{boardId}
     </select>
     
-
+    <insert id="insertBoardDetail" parameterType = "com.sih.dao.dto.BoardDto">
+    	INSERT INTO BOARD
+		(`BOARD_TITLE`,
+		`BOARD_CRET_TS`,
+		`BOARD_WRT_ID`,
+		`BOARD_CONTENT`,
+		`ATCH_NO`)
+		VALUES
+		(#{boardTitle},
+		#{boardCretTs},
+		#{boardWrtId},
+		#{boardContent},
+		#{atchNo})
+    </insert>
+    
+    <select id="lastInsertId" resultType="BigInteger">
+    	SELECT LAST_INSERT_ID();
+    </select>
+    
+    <insert id="insertAtchBase" parameterType = "com.sih.dao.dto.AtchDto">
+    	INSERT INTO ATCH_BASE
+		(`ATCH_PATH`,
+		 `ATCH_TTL_SIZE`,
+		 `ATCH_CNT`)
+		VALUES
+		(#{atchPath},
+		 #{atchTtlSize},
+		 #{atchCnt})
+    </insert>
+    
+    <insert id="insertAtchDtl" parameterType = "com.sih.dao.dto.AtchDtlDto">
+    	INSERT INTO ATCH_DTL
+		(
+		`ATCH_NO`,
+		`ATCH_DTLNO`,
+		`ATCH_NM`,
+		`ATCH_SIZE`,
+		`ATCH_PHYS_NM`
+		)
+		VALUES
+		(
+		#{atchNo},
+		#{atchDtlno},
+		#{atchNm},
+		#{atchSize},
+		#{atchPhysNm}
+		)
+    </insert>
+    
+    <select id="selectAtchDtl" parameterType = "com.sih.dao.dto.AtchDto" resultType="com.sih.dao.dto.AtchDto">
+    	SELECT AD.ATCH_DTLNO AS atchDtlno
+    	     , AD.ATCH_NO AS atchNo
+    	     , AD.ATCH_NM AS atchNm
+    	     , AD.ATCH_SIZE AS atchSize
+    	     , AD.ATCH_PHYS_NM AS atchPhysNm
+    	FROM ATCH_DTL AD
+    	WHERE AD.ATCH_NO = #{atchNo}
+    </select>
+    
+    <select id="selectAtchDnld" parameterType = "com.sih.dao.dto.AtchDto" resultType="com.sih.dao.dto.AtchDto">
+    	SELECT AD.ATCH_DTLNO AS atchDtlno
+    	     , AD.ATCH_NO AS atchNo
+    	     , AD.ATCH_NM AS atchNm
+    	     , AD.ATCH_SIZE AS atchSize
+    	     , AD.ATCH_PHYS_NM AS atchPhysNm
+    	     , AB.ATCH_PATH AS atchPath
+    	FROM ATCH_DTL AD
+    	INNER JOIN ATCH_BASE AB ON AB.ATCH_NO = AD.ATCH_NO
+    	WHERE AD.ATCH_NO = #{atchNo}
+    	  AND AD.ATCH_DTLNO = #{atchDtlno}
+    </select>
+	
+	<select id="selectForUpdateBoardDetail" parameterType = "com.sih.dao.dto.BoardDto" resultType="com.sih.dao.dto.BoardDto">
+    	SELECT B.BOARD_ID AS boardId
+    	     , B.BOARD_TITLE AS boardTitle
+    	     , B.BOARD_CRET_TS AS boardCretTs
+    	     , B.BOARD_WRT_ID AS boardWrtId
+    	     , B.BOARD_CONTENT AS boardContent
+    	     , B.ATCH_NO AS atchNo
+    	FROM BOARD B
+    	WHERE B.BOARD_ID = #{boardId}
+    	FOR UPDATE
+    </select>
+	
+	<update id="updateBoardDetail" parameterType="com.sih.dao.dto.BoardDto">
+	UPDATE BOARD
+    SET
+    BOARD_ID = #{boardId},
+    BOARD_TITLE = #{boardTitle},
+    BOARD_CRET_TS = #{boardCretTs},
+    BOARD_WRT_ID = #{boardWrtId},
+    BOARD_CONTENT = #{boardContent},
+    ATCH_NO = #{atchNo}
+    WHERE `BOARD_ID` = #{boardId};
+	</update>
+	
+	<delete id='deleteAtchDtl' parameterType = "com.sih.dao.dto.AtchDto">
+	DELETE FROM ATCH_DTL
+	WHERE ATCH_NO = #{atchNo}
+	  AND ATCH_DTLNO = #{atchDtlno}
+	</delete>
+    
+    <select id="selectAtchBase" parameterType = "com.sih.dao.dto.AtchDto" resultType="com.sih.dao.dto.AtchDto">
+    	SELECT AB.ATCH_NO AS atchNo
+    	     , AB.ATCH_PATH AS atchPath
+    	     , AB.ATCH_TTL_SIZE AS atchTtlSize
+    	     , AB.ATCH_CNT AS atchCnt
+    	FROM ATCH_BASE AB
+    	WHERE AB.ATCH_NO = #{atchNo}
+    </select>
+    
+    <select id="selectNmbnAtchDtlno" parameterType = "BigInteger" resultType="BigInteger">
+		SELECT CASE WHEN iSNULL(MAX(AD.ATCH_DTLNO)) then 1 ELSE MAX(AD.ATCH_DTLNO) + 1 END AS atchDtlno 
+		FROM ATCH_DTL AD
+		WHERE AD.ATCH_NO = #{atchNo};
+    </select>
+    
+    <select id="selectForUpdateAtchBase" parameterType = "com.sih.dao.dto.AtchDto" resultType="com.sih.dao.dto.AtchDto">
+    	SELECT AB.ATCH_NO AS atchNo
+    	     , AB.ATCH_PATH AS atchPath
+    	     , AB.ATCH_TTL_SIZE AS atchTtlSize
+    	     , AB.ATCH_CNT AS atchCnt
+    	FROM ATCH_BASE AB
+    	WHERE AB.ATCH_NO = #{atchNo}
+    	FOR UPDATE
+    </select>
+	
+	<update id="updateAtchBase" parameterType="com.sih.dao.dto.AtchDto">
+	UPDATE ATCH_BASE
+    SET
+    ATCH_NO = #{atchNo},
+    ATCH_PATH = #{atchPath},
+    ATCH_TTL_SIZE = #{atchTtlSize},
+    ATCH_CNT = #{atchCnt},
+    WHERE `ATCH_NO` = #{atchNo};
+	</update>
     
 </mapper>

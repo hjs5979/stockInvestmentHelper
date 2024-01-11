@@ -351,8 +351,8 @@ public class UserService {
 		userOutVo.setUserId(userOutDto.getUserId());
 		userOutVo.setUserName(userOutDto.getUserName());
 		userOutVo.setUserEmail(userOutDto.getUserEmail());
-		
-		logger.info("selectUser service service end");
+		logger.info("================================================================");
+		logger.info("============== selectUser service service end ====================");
 		
 		return userOutVo;
 	}

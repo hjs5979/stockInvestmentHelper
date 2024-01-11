@@ -15,24 +15,25 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BoardInVo {
-	private BigInteger boardId;
+public class AtchInVo {
 	
-	private String boardTitle;
+	private BigInteger atchNo; 
 	
-	private LocalDate boardYmd;
-	
-	private String boardWrtId;
-	
-	private String boardContent;
+	private String atchDirNm;
 	
 	private List<MultipartFile> fileList;
 	
-	private BigInteger atchNo;
+	private BigInteger atchDtlno;
 	
-	private List<AtchDto> cancelFiles;
+	private String atchPath;
+	
+	private String atchNm;
+	
+	private String atchPhysNm;
 	
 	private long atchCnt;
 	
 	private long atchTtlSize;
+	
+	private List<AtchDto> cancelfiles;
 }
