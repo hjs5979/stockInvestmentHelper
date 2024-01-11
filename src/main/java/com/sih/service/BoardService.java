@@ -223,6 +223,26 @@ public class BoardService {
 		}
 		
 	}
+	
+	/*
+	 * 설명 : 게시판 삭제 서비스
+	 */
+	@Transactional
+	public void deleteBoardDetail(BoardInVo boardInVo){
+		
+		logger.info("===================================================================");
+		logger.info("================== deleteBoardDetail service start ==================");
+		
+//		this.vrfcMdfcBoardInputValue(boardInVo);
+		
+		BigInteger boardId = boardInVo.getBoardId();
+		
+		sihDao.deleteBoardDetail(boardId);
+		
+		logger.info("============ deleteBoardDetail service end =============+");
+		logger.info("=========================================================");
+		
+	}
 
 
 }

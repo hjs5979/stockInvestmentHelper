@@ -14,5 +14,7 @@ public class TokenInVo {
 	private String refreshToken;
 	
 	private String userId;
+	
+	private String userRole;
 
 }

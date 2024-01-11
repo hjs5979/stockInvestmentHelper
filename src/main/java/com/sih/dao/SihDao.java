@@ -61,4 +61,6 @@ public interface SihDao {
 	
 	public void updateAtchBase(AtchDto atchDto);
 	
+	public void deleteBoardDetail(BigInteger boardId);
+	
 }

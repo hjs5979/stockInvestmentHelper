@@ -17,4 +17,6 @@ public class UserInVo {
 	private String userEmail;
 	
 	private String newPassword;
+	
+	private String userRole;
 }

@@ -347,10 +347,11 @@ public class UserService {
 		
 		
 		UserOutVo userOutVo = new UserOutVo();
-//		
+		
 		userOutVo.setUserId(userOutDto.getUserId());
 		userOutVo.setUserName(userOutDto.getUserName());
 		userOutVo.setUserEmail(userOutDto.getUserEmail());
+		userOutVo.setUserRole(userOutDto.getUserRole());
 		logger.info("================================================================");
 		logger.info("============== selectUser service service end ====================");
 		
@@ -397,6 +398,15 @@ public class UserService {
         		result.setAccessToken(accessToken);
         		result.setRefreshToken(tokenInVo.getRefreshToken());
         		
+        		if(tokenInVo.getUserRole() != null) {
+        			UserDto userInDto = new UserDto();
+        			
+        			userInDto.setUserId(redisUserId);
+        			userInDto.setUserRole(tokenInVo.getUserRole());
+        			
+        			this.checkRole(userInDto);
+        		}
+        		
         		return result;
         	}
         	else {
@@ -413,6 +423,34 @@ public class UserService {
 		logger.info("================== checkUser service end ==================");
 		
 		return result;
+		
+	}
+	
+	/*
+	 * 설명 : 유저권한 확인 서비스
+	 */
+	@Transactional
+	public void checkRole(UserDto userDto){
+		
+		logger.info("=========================================================");
+		logger.info("================== checkRole service start ==================");
+		
+//		if(ObjectUtils.isEmpty(userInVo.getUserId())) {
+//			throw new RuntimeException("login service 입력조건 [ userId ]");
+//		}
+		
+		UserDto userInDto = new UserDto();
+		
+		userInDto.setUserId(userDto.getUserId());
+		
+		UserDto userOutDto = userDao.selectUser(userInDto);
+		
+		if(!(userOutDto.getUserRole().equals(userDto.getUserRole()))) {
+			throw new RuntimeException("권한다름");
+		}
+		
+		logger.info("================================================================");
+		logger.info("============== checkRole service service end ====================");
 		
 	}
 	

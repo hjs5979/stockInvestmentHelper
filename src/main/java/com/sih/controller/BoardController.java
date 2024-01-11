@@ -184,4 +184,31 @@ public class BoardController {
 //		return boardOutVo;
 	}
 	
+	/*
+	 * 설명 : 게시판 삭제 컨트롤러
+	 */
+	@PostMapping("/delete")
+	public void deleteBoardDetail(@RequestBody BoardInVo boardInVo, HttpServletRequest httpRequest){
+		logger.info("==================================================================");
+		logger.info("=============== deleteBoardDetail controller start ================");
+		
+		if (boardInVo == null) {
+			throw new RuntimeException("deleteBoardDetail Controller 입력조건");
+		}
+
+		TokenInVo tokenInVo = new TokenInVo();
+		
+		tokenInVo.setAccessToken(httpRequest.getHeader("accessToken"));
+		tokenInVo.setRefreshToken(httpRequest.getHeader("refreshToken"));
+		tokenInVo.setUserId(httpRequest.getHeader("userId"));
+		
+		userService.checkUser(tokenInVo);
+
+		boardService.deleteBoardDetail(boardInVo);
+			
+		logger.info("============= deleteBoardDetail controller end ================");
+		logger.info("================================================================");
+//		return boardOutVo;
+	}
+	
 }

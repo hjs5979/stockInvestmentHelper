@@ -15,4 +15,6 @@ public class UserOutVo {
 	private String userName;
 	
 	private String userEmail;
+	
+	private String userRole;
 }

@@ -244,5 +244,10 @@
     ATCH_CNT = #{atchCnt}
     WHERE ATCH_NO = #{atchNo};
 	</update>
+	
+	<delete id="deleteBoardDetail" parameterType="BigInteger">
+	Delete FROM BOARD
+	WHERE BOARD_ID = #{boardId};
+	</delete>
     
 </mapper>
