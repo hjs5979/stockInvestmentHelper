@@ -55,7 +55,7 @@ public class AtchService {
 		logger.info("===================================================================");
 		logger.info("================== upload service start ==================");
 		
-		this.vrfcUploadInputValue(atchInVo);
+//		this.vrfcUploadInputValue(atchInVo);
 		
 		String atchDirNm = LocalDate.now().toString();
 		
@@ -86,55 +86,53 @@ public class AtchService {
 		} else {
 			atchNo = atchInVo.getAtchNo();
 			
+			AtchDto atchOutDto = sihDao.selectForUpdateAtchBase(atchNo);
 			
-//			List<AtchDto> cancelFiles = atchInVo.getCancelfiles();
-//			
-//			if (cancelFiles != null) {
-//				
-//				this.deleteAtchDtl(cancelFiles);
-//			}
+			atchOutDto.setAtchCnt(atchDto.getAtchCnt());
+			atchOutDto.setAtchTtlSize(atchDto.getAtchTtlSize());
 			
+			sihDao.updateAtchBase(atchOutDto);
+						
 		}
-		
-//		BigInteger atchDtlno = BigInteger.valueOf(1);
-		
-		for (MultipartFile file : fileList) {
-			
-			AtchDtlDto atchDtlDto = new AtchDtlDto();
-			
-			String extension = "";
-			
-			String originalFilename = file.getOriginalFilename();
-			
-			int dotIndex = originalFilename.lastIndexOf(".");
-			
-			if (dotIndex > 0) { // 파일 이름에 점(.)이 존재하는 경우
-	            extension = originalFilename.substring(dotIndex);
-	        }
-			
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
-			
-			// LocalDateTime 객체를 형식에 맞게 포맷팅
-	        String formattedDateTime = LocalDateTime.now().format(formatter);
-	        
-	        BigInteger atchDtlno = sihDao.selectNmbnAtchDtlno(atchNo);
-	        
-			String atchNm = formattedDateTime + "-" + atchDtlno + extension;
-			
-			atchDtlDto.setAtchDtlno(atchDtlno);
-			atchDtlDto.setAtchNo(atchNo);
-			atchDtlDto.setAtchNm(originalFilename);
-			atchDtlDto.setAtchPhysNm(atchNm);
-			atchDtlDto.setAtchSize(file.getSize());
-			
-			sihDao.insertAtchDtl(atchDtlDto);
-			
-//			atchDtlno = atchDtlno.add(BigInteger.valueOf(1));
-			
-			File outputFile = new File(folderPath + "/" +atchNm);
-	        
-			file.transferTo(outputFile);
-	        
+		if(atchInVo.getFileList() != null) {
+			for (MultipartFile file : fileList) {
+				
+				AtchDtlDto atchDtlDto = new AtchDtlDto();
+				
+				String extension = "";
+				
+				String originalFilename = file.getOriginalFilename();
+				
+				int dotIndex = originalFilename.lastIndexOf(".");
+				
+				if (dotIndex > 0) { // 파일 이름에 점(.)이 존재하는 경우
+		            extension = originalFilename.substring(dotIndex);
+		        }
+				
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
+				
+				// LocalDateTime 객체를 형식에 맞게 포맷팅
+		        String formattedDateTime = LocalDateTime.now().format(formatter);
+		        
+		        BigInteger atchDtlno = sihDao.selectNmbnAtchDtlno(atchNo);
+		        
+				String atchNm = formattedDateTime + "-" + atchDtlno + extension;
+				
+				atchDtlDto.setAtchDtlno(atchDtlno);
+				atchDtlDto.setAtchNo(atchNo);
+				atchDtlDto.setAtchNm(originalFilename);
+				atchDtlDto.setAtchPhysNm(atchNm);
+				atchDtlDto.setAtchSize(file.getSize());
+				
+				sihDao.insertAtchDtl(atchDtlDto);
+				
+	//			atchDtlno = atchDtlno.add(BigInteger.valueOf(1));
+				
+				File outputFile = new File(folderPath + "/" +atchNm);
+		        
+				file.transferTo(outputFile);
+		        
+			}
 		}
 		
 		logger.info("============ upload service end ==============");

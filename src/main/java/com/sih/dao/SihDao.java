@@ -57,4 +57,8 @@ public interface SihDao {
 	
 	public BigInteger selectNmbnAtchDtlno(BigInteger atchNo);
 	
+	public AtchDto selectForUpdateAtchBase(BigInteger atchNo);
+	
+	public void updateAtchBase(AtchDto atchDto);
+	
 }

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -144,7 +145,7 @@ public class BoardController {
 		if (boardInVo == null) {
 			throw new RuntimeException("mdfcBoard Controller 입력조건");
 		}
-		
+
 		TokenInVo tokenInVo = new TokenInVo();
 		
 		tokenInVo.setAccessToken(httpRequest.getHeader("accessToken"));
@@ -158,16 +159,19 @@ public class BoardController {
 		atchInVo.setFileList(boardInVo.getFileList());
 		atchInVo.setCancelfiles(boardInVo.getCancelFiles());
 		atchInVo.setAtchNo(boardInVo.getAtchNo());
+		atchInVo.setAtchCnt(boardInVo.getAtchCnt());
+		atchInVo.setAtchTtlSize(boardInVo.getAtchTtlSize());
 		
-		if(boardInVo.getCancelFiles() != null) {
+		if(boardInVo.getAtchNo() != null &&  boardInVo.getCancelFiles() != null) {
 			
 			atchService.deleteAtchDtl(boardInVo.getCancelFiles());
+			BigInteger atchNo = atchService.upload(atchInVo);
+			boardInVo.setAtchNo(atchNo);
 		}
 		
-		if (boardInVo.getFileList() != null) {
+		if (boardInVo.getFileList() != null && boardInVo.getCancelFiles() == null) {
 			
 			BigInteger atchNo = atchService.upload(atchInVo);
-			
 			boardInVo.setAtchNo(atchNo);
 			
 		}

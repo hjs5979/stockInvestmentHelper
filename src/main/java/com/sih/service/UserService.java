@@ -366,6 +366,13 @@ public class UserService {
 		logger.info("=============================================================");
 		logger.info("================== checkUser service start ==================");
 		
+		if(tokenInVo.getAccessToken() == null) {
+			throw new RuntimeException("accessToken 없음");
+		}
+		if(tokenInVo.getRefreshToken() == null){
+			throw new RuntimeException("refreshToken 없음");
+		}
+		
 		String redisAccessToken = redisTemplate.opsForHash().get(tokenInVo.getRefreshToken(), "accessToken")== null ? "" : redisTemplate.opsForHash().get(tokenInVo.getRefreshToken(), "accessToken").toString();
     	String redisUserId = redisTemplate.opsForHash().get(tokenInVo.getRefreshToken(), "userId")==null ? "" : redisTemplate.opsForHash().get(tokenInVo.getRefreshToken(), "userId").toString();
     	

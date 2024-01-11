@@ -225,7 +225,7 @@
 		WHERE AD.ATCH_NO = #{atchNo};
     </select>
     
-    <select id="selectForUpdateAtchBase" parameterType = "com.sih.dao.dto.AtchDto" resultType="com.sih.dao.dto.AtchDto">
+    <select id="selectForUpdateAtchBase" parameterType = "BigInteger" resultType="com.sih.dao.dto.AtchDto">
     	SELECT AB.ATCH_NO AS atchNo
     	     , AB.ATCH_PATH AS atchPath
     	     , AB.ATCH_TTL_SIZE AS atchTtlSize
@@ -241,8 +241,8 @@
     ATCH_NO = #{atchNo},
     ATCH_PATH = #{atchPath},
     ATCH_TTL_SIZE = #{atchTtlSize},
-    ATCH_CNT = #{atchCnt},
-    WHERE `ATCH_NO` = #{atchNo};
+    ATCH_CNT = #{atchCnt}
+    WHERE ATCH_NO = #{atchNo};
 	</update>
     
 </mapper>
