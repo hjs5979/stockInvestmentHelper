@@ -7,6 +7,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -42,6 +43,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.redis.core.RedisTemplate;
 @RequiredArgsConstructor
 @Service
@@ -57,7 +59,6 @@ public class UserService {
 	
 	private final RedisTemplate<String,String> redisTemplate;
 	
-	private final RedisConfig redisconfig;
 	
 	/*
 	 * 설명 : 로그인 서비스
@@ -362,16 +363,16 @@ public class UserService {
 	 * 설명 : 유저토큰 확인 서비스
 	 */
 	@Transactional
-	public TokenOutVo checkUser(TokenInVo tokenInVo) {
+	public TokenOutVo checkUser(TokenInVo tokenInVo) throws CustomException {
 		
 		logger.info("=============================================================");
 		logger.info("================== checkUser service start ==================");
 		
 		if(tokenInVo.getAccessToken() == null) {
-			throw new RuntimeException("accessToken 없음");
+			throw new CustomException(messageSource.getMessage("INPUT001", null, LocaleContextHolder.getLocale()) + "accessToken" + messageSource.getMessage("INPUT0011", null, LocaleContextHolder.getLocale()));
 		}
 		if(tokenInVo.getRefreshToken() == null){
-			throw new RuntimeException("refreshToken 없음");
+			throw new CustomException(messageSource.getMessage("INPUT001", null, LocaleContextHolder.getLocale()) + "refreshToken" + messageSource.getMessage("INPUT0011", null, LocaleContextHolder.getLocale()));
 		}
 		
 		String redisAccessToken = redisTemplate.opsForHash().get(tokenInVo.getRefreshToken(), "accessToken")== null ? "" : redisTemplate.opsForHash().get(tokenInVo.getRefreshToken(), "accessToken").toString();
@@ -386,7 +387,7 @@ public class UserService {
         	
         	
         	if (ObjectUtils.isEmpty(redisAccessToken) || ObjectUtils.isEmpty(redisUserId)) {
-        		throw new RuntimeException("유효하지 않음1");
+        		throw new CustomException(messageSource.getMessage("USER001", null, LocaleContextHolder.getLocale()));
         	}
         	
         	else if(redisUserId.equals(tokenInVo.getUserId())){
@@ -410,7 +411,7 @@ public class UserService {
         		return result;
         	}
         	else {
-        		throw new RuntimeException("유효하지 않음2");
+        		throw new CustomException(messageSource.getMessage("USER002", null, LocaleContextHolder.getLocale()));
         	}
         	
         	
@@ -430,7 +431,7 @@ public class UserService {
 	 * 설명 : 유저권한 확인 서비스
 	 */
 	@Transactional
-	public void checkRole(UserDto userDto){
+	public void checkRole(UserDto userDto) throws CustomException {
 		
 		logger.info("=========================================================");
 		logger.info("================== checkRole service start ==================");
@@ -446,7 +447,7 @@ public class UserService {
 		UserDto userOutDto = userDao.selectUser(userInDto);
 		
 		if(!(userOutDto.getUserRole().equals(userDto.getUserRole()))) {
-			throw new RuntimeException("권한다름");
+			throw new CustomException(messageSource.getMessage("USER003", null, LocaleContextHolder.getLocale()));
 		}
 		
 		logger.info("================================================================");

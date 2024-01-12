@@ -23,6 +23,7 @@ import com.sih.controller.vo.UserOutVo;
 import com.sih.controller.vo.WordInVo;
 import com.sih.controller.vo.WordOutVo;
 import com.sih.dao.dto.UserDto;
+import com.sih.service.CustomException;
 import com.sih.service.DetailService;
 import com.sih.service.MainService;
 import com.sih.service.UserService;
@@ -140,7 +141,7 @@ public class UserController {
 	 * 설명 : 유저정보 조회 컨트롤러
 	 */
 	@PostMapping("/checkUser")
-	public TokenOutVo checkUser(@RequestBody TokenInVo tokenInVo){
+	public TokenOutVo checkUser(@RequestBody TokenInVo tokenInVo) throws CustomException{
 		logger.info("======================================================");
 		logger.info("============ checkUser Controller start ============");
 		

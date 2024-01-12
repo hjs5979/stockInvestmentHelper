@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -30,6 +32,7 @@ import com.sih.controller.vo.PageOutVo;
 import com.sih.dao.dto.AtchDto;
 import com.sih.service.AtchService;
 import com.sih.service.BoardService;
+import com.sih.service.CustomException;
 import com.sih.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -42,11 +45,13 @@ public class AtchController {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	private final AtchService atchService;
+	
+	private final MessageSource messageSource;
 	/*
 	 * 설명 : 다운로드 컨트롤러
 	 */
 	@GetMapping("/dnld")
-	public void dnld(HttpServletResponse response ,@RequestParam BigInteger atchNo, @RequestParam BigInteger atchDtlno) throws IOException {
+	public void dnld(HttpServletResponse response ,@RequestParam BigInteger atchNo, @RequestParam BigInteger atchDtlno) throws IOException, CustomException {
 		logger.info("===========================================================");
 		logger.info("============ dnld controller start =============");
 		
@@ -60,8 +65,14 @@ public class AtchController {
 		
 		String path = directory + "/" + atchOutDto.getAtchPhysNm();
 		
-		byte[] fileByte = FileUtils.readFileToByteArray(new File(path));
+		byte[] fileByte;
 		
+		try {
+			fileByte = FileUtils.readFileToByteArray(new File(path));
+		}
+		catch(Exception e) {
+			throw new CustomException(messageSource.getMessage("ATCH001", null, LocaleContextHolder.getLocale()));
+		}
 //		Resource resource = new FileSystemResource(filePath);
 //		
 		String fileName = atchOutDto.getAtchNm();

@@ -32,6 +32,7 @@ import com.sih.controller.vo.WordInVo;
 import com.sih.controller.vo.WordOutVo;
 import com.sih.service.AtchService;
 import com.sih.service.BoardService;
+import com.sih.service.CustomException;
 import com.sih.service.DetailService;
 import com.sih.service.MainService;
 import com.sih.service.UserService;
@@ -74,7 +75,7 @@ public class BoardController {
 	 * 설명 : 게시판 상세 조회 컨트롤러
 	 */
 	@PostMapping("/detail")
-	public BoardOutVo selectBoardDetail(@RequestBody BoardInVo boardInVo, HttpServletRequest httpRequest) {
+	public BoardOutVo selectBoardDetail(@RequestBody BoardInVo boardInVo, HttpServletRequest httpRequest) throws CustomException {
 		logger.info("===========================================================");
 		logger.info("======== selectDetailList controller start ================");
 		
@@ -97,7 +98,7 @@ public class BoardController {
 	 * 설명 : 게시판 등록 컨트롤러
 	 */
 	@PostMapping("/reg")
-	public void regBoard(@ModelAttribute BoardInVo boardInVo, HttpServletRequest httpRequest) throws IOException {
+	public void regBoard(@ModelAttribute BoardInVo boardInVo, HttpServletRequest httpRequest) throws IOException, CustomException {
 		logger.info("===========================================================");
 		logger.info("============= regBoard controller start ===================");
 		
@@ -138,7 +139,7 @@ public class BoardController {
 	 * 설명 : 게시판 수정 컨트롤러
 	 */
 	@PostMapping("/mdfc")
-	public void mdfcBoard(@ModelAttribute BoardInVo boardInVo, HttpServletRequest httpRequest) throws IOException {
+	public void mdfcBoard(@ModelAttribute BoardInVo boardInVo, HttpServletRequest httpRequest) throws IOException, CustomException {
 		logger.info("===========================================================");
 		logger.info("======== selectDetailList controller start ================");
 		
@@ -188,7 +189,7 @@ public class BoardController {
 	 * 설명 : 게시판 삭제 컨트롤러
 	 */
 	@PostMapping("/delete")
-	public void deleteBoardDetail(@RequestBody BoardInVo boardInVo, HttpServletRequest httpRequest){
+	public void deleteBoardDetail(@RequestBody BoardInVo boardInVo, HttpServletRequest httpRequest) throws CustomException{
 		logger.info("==================================================================");
 		logger.info("=============== deleteBoardDetail controller start ================");
 		
