@@ -420,7 +420,7 @@ public class UserService {
 		result.setAccessToken(tokenInVo.getAccessToken());
 		result.setRefreshToken(tokenInVo.getRefreshToken());
 		
-		logger.info("=========================================================");
+		logger.info("===========================================================");
 		logger.info("================== checkUser service end ==================");
 		
 		return result;
