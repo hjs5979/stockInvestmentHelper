@@ -310,14 +310,14 @@ public class UserService {
 		UserDto userOutDto = userDao.selectUser(userInDto);
 		
 		if (passwordEncoder.matches(userInVo.getUserPassword(), userOutDto.getUserPassword())){
-			logger.info("======================= 로그인 성공 =============================");
+			logger.info("======================= 비밀번호 일치 =============================");
 		}
 		else {
 			logger.info("======================= 로그인 실패 =============================");
 			throw new RuntimeException("mdfcPassword : 비밀번호 오류");
 		}
 		
-		userOutDto.setUserPassword(userInVo.getNewPassword());
+		userOutDto.setUserPassword(passwordEncoder.encode(userInVo.getNewPassword()));
 		
 		userDao.mdfcUserInfo(userOutDto);
 		

@@ -2,6 +2,7 @@ package com.sih.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -155,6 +156,35 @@ public class UserController {
 		
 		logger.info("============ checkUser Controller end ============");
 		logger.info("=====================================================");
+		return result;
+	}
+	
+	/*
+	 * 설명 : 비밀번호 수정 컨트롤러
+	 */
+	@PostMapping("/mdfcPassword")
+	public UserDto mdfcPassword(@RequestBody UserInVo userInVo, HttpServletRequest httpRequest) throws CustomException{
+		logger.info("=================================================");
+		logger.info("============ mdfcPassword Controller start ============");
+		
+		if (userInVo == null) {
+			throw new RuntimeException("mdfcPassword Controller 입력조건");
+		}
+		
+		TokenInVo tokenInVo = new TokenInVo();
+		
+		tokenInVo.setAccessToken(httpRequest.getHeader("accessToken"));
+		tokenInVo.setRefreshToken(httpRequest.getHeader("refreshToken"));
+		tokenInVo.setUserId(httpRequest.getHeader("userId"));
+		
+		this.checkUser(tokenInVo);
+		
+		userInVo.setUserId(httpRequest.getHeader("userId"));
+		
+		UserDto result = userService.mdfcPassword(userInVo);
+		
+		logger.info("============ mdfcPassword Controller end ============");
+		logger.info("===============================================");
 		return result;
 	}
 	
