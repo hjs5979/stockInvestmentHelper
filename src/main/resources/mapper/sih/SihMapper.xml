@@ -1,6 +1,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sih.dao.SihDao">
     <!-- 여기에 SQL 쿼리들을 작성합니다. -->
+    <select id="selectStock" resultType="com.sih.dao.dto.StockDto">
+    	SELECT S.STOCK_ID AS stockId
+    	     , S.STOCK_THEMA AS stockThema
+    	     , S.STOCK_VALUE AS stockValue 
+    	FROM STOCK S
+    	WHERE 1=1
+          AND N.id = #{id}
+    </select>
+    
     <select id="selectStockList" resultType="com.sih.dao.dto.StockDto">
     	SELECT S.STOCK_ID AS stockId
     	     , S.STOCK_THEMA AS stockThema
@@ -9,18 +18,32 @@
     	
     </select>
     
-    <select id="selectNewsList" parameterType = "com.sih.dao.dto.NewsDto" resultType="com.sih.dao.dto.NewsDto">
+    <select id="selectNews" parameterType = "com.sih.dao.dto.NewsDto" resultType="com.sih.dao.dto.NewsDto">
+    	SELECT N.id
+    	     , N.category
+    	     , N.title
+    	     , N.url
+    	FROM news N
+    	WHERE 1=1
+	      AND N.id = #{id}
+    </select>
+    
+    <select id="selectNewsList" resultType = "com.sih.dao.dto.NewsDto">
     	SELECT N.id
     	     , N.category
     	     , N.title
     	     , N.url
     	FROM news N
     	
-    	WHERE 
-    	1=1
-    	<if test='id != null'>
-			AND N.id = #{id}
- 		</if>
+    </select>
+    
+    <select id="selectWord" parameterType = "com.sih.dao.dto.WordDto" resultType="com.sih.dao.dto.WordDto">
+    	SELECT W.WORD_ID as wordId
+    	     , W.WORD_CONTENT as wordContent
+    	     , W.WORD_COUNT as wordCount
+    	FROM WORD W
+    	WHERE 1=1
+	      AND W.WORD_ID = #{wordId}
     </select>
     
     <select id="selectWordList" resultType="com.sih.dao.dto.WordDto">
@@ -41,7 +64,6 @@
     	<if test='id != null'>
 			AND NW.id = #{id}
  		</if>
- 		
     </select>
     
     <select id="selectDetailList" parameterType = "com.sih.dao.dto.WordDto" resultType="com.sih.dao.dto.DetailDto">
@@ -57,6 +79,14 @@
     	LEFT JOIN NEWS N
     	       ON N.NEWS_Id = NW.NEWS_ID
     	WHERE W.WORD_ID = #{wordId}
+    </select>
+    
+    <select id="selectListInqNews" parameterType = "com.sih.dao.dto.NewsInqDto" resultType="com.sih.dao.dto.DetailDto">
+    	SELECT N.NEWS_TITLE as newsTitle
+    		 , N.NEWS_ID as newsId
+    	     , N.NEWS_URL as newsUrl   
+    	FROM NEWS N
+    	WHERE CONCAT(N.NEWS_TITLE, N.NEWS_CONTENT) LIKE CONCAT('%', #{inqCndtCon}, '%')
     </select>
     
     <select id="countBoardList" parameterType = "com.sih.dao.dto.BoardInqDto" resultType="Integer">

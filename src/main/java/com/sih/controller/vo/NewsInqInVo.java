@@ -7,12 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class WordInVo {
-	private Integer wordId;
+public class NewsInqInVo {
 	
-	private String wordContent;
-		
-	private Integer wordCount;
-	
-    private String inqCndtCon;
+	private String inqCndtCon;
+
 }

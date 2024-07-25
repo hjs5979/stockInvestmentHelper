@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sih.controller.vo.DetailOutVo;
+import com.sih.controller.vo.NewsInqInVo;
 import com.sih.controller.vo.StockOutVo;
+import com.sih.controller.vo.WordDetailOutVo;
 import com.sih.controller.vo.WordInVo;
 import com.sih.controller.vo.WordOutVo;
 import com.sih.service.DetailService;
@@ -63,7 +65,7 @@ public class MainController {
 	 * 설명 : 메인 - 단어선택 시 상세조회 컨트롤러
 	 */
 	@PostMapping("/detail")
-	public List<DetailOutVo> selectDetailList(@RequestBody WordInVo wordInVo) {
+	public WordDetailOutVo selectDetailList(@RequestBody WordInVo wordInVo) {
 		logger.info("==========================================================");
 		logger.info("============ selectDetailList controller start ============");
 		
@@ -71,9 +73,28 @@ public class MainController {
 			throw new RuntimeException("selectDetailList Controller 입력조건");
 		}
 		
-		List<DetailOutVo> detailOutVo = detailService.selectDetailList(wordInVo);
+		WordDetailOutVo detailOutVo = detailService.selectDetailList(wordInVo);
 			
 		logger.info("============ selectDetailList controller end ============");
+		logger.info("=========================================================");
+		return detailOutVo;
+	}
+	
+	/*
+	 * 설명 : 메인 - 상세페이지에서 직접 검색
+	 */
+	@PostMapping("/inqNews")
+	public List<DetailOutVo> selectListInqNews(@RequestBody NewsInqInVo newsInqInVo) {
+		logger.info("==========================================================");
+		logger.info("============ selectListInqNews controller start ============");
+		
+		if (newsInqInVo == null) {
+			throw new RuntimeException("selectListInqNews Controller 입력조건");
+		}
+		
+		List<DetailOutVo> detailOutVo = detailService.selectListInqNews(newsInqInVo);
+			
+		logger.info("============ selectListInqNews controller end ============");
 		logger.info("=========================================================");
 		return detailOutVo;
 	}

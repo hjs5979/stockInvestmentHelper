@@ -12,6 +12,7 @@ import com.sih.dao.dto.BoardDto;
 import com.sih.dao.dto.BoardInqDto;
 import com.sih.dao.dto.DetailDto;
 import com.sih.dao.dto.NewsDto;
+import com.sih.dao.dto.NewsInqDto;
 import com.sih.dao.dto.NewsWordDto;
 import com.sih.dao.dto.StockDto;
 import com.sih.dao.dto.WordDto;
@@ -19,15 +20,23 @@ import com.sih.dao.dto.WordDto;
 @Mapper
 public interface SihDao {
 	
+	public StockDto selectStock(StockDto stockDto);
+	
 	public List<StockDto> selectStockList();
 	
-	public List<NewsDto> selectNewsList(NewsDto NewsDto);
+	public NewsDto selectNewsList(NewsDto NewsDto);
+	
+	public List<NewsDto> selectNewsList();
 	
 	public List<NewsWordDto> selectNewsWordList(NewsWordDto NewsWordDto);
+	
+	public WordDto selectWord(WordDto wordDto);
 	
 	public List<WordDto> selectWordList();
 	
 	public List<DetailDto> selectDetailList(WordDto WordDto);
+	
+	public List<DetailDto> selectListInqNews(NewsInqDto newsInqDto);
 	
 	public List<BoardDto> selectBoardList(BoardInqDto boardInqDto);
 	
