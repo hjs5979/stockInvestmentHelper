@@ -21,14 +21,14 @@ https://
 ## ERD
 
 <div markdown="1" style="padding-left: 15px;">
-<img src="" />
+  <img src="https://github.com/user-attachments/assets/e2ee72cb-99e1-49d8-b807-7615942cd6c4" />
 </div>
 
 
 ## Structure
 
 <div markdown="1" style="padding-left: 15px;">
-<img src="" />
+<img src="https://github.com/user-attachments/assets/56fef95d-afb1-452b-ae49-a282d4085dab" />
 </div>
 
 ## 서비스 설명
