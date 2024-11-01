@@ -9,7 +9,7 @@ https://
 
 > java  
 > SpringBoot  
-> MySql
+> MySql  
 > Redis
 
 ## 2. Front-end
